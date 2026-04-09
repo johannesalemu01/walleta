@@ -1,0 +1,70 @@
+name: birr_track
+description: "Birr Track — Ethiopian Expense Tracker"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  provider: ^6.1.2
+
+  # Navigation
+  go_router: ^14.3.0
+
+  # Storage
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+
+  # Charts
+  fl_chart: ^0.69.0
+
+  # PDF export
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+  # Biometrics
+  local_auth: ^2.3.0
+
+  # Icons
+  flutter_vector_icons: ^2.0.0
+
+  # Fonts
+  google_fonts: ^6.2.1
+
+  # UUID generation
+  uuid: ^4.4.2
+
+  # Image picker
+  image_picker: ^1.1.2
+
+  # File sharing
+  share_plus: ^10.0.3
+
+  # Path provider (for PDF temp files)
+  path_provider: ^2.1.4
+
+  # Intl for date formatting
+  intl: ^0.19.0
+
+  # Crypto for SMS deduplication hashing
+  crypto: ^3.0.5
+
+  # SMS (Android only)
+  telephony: ^0.2.0
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/logos/
