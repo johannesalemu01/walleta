@@ -429,9 +429,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               const Text('Built by ', style: TextStyle(color: AppColors.textTertiary, fontSize: 11)),
                               GestureDetector(
-                                onTap: () => launchUrl(Uri.parse('https://henokenyew.me')),
+                                onTap: () => launchUrl(Uri.parse('https://github.com/johannesalemu01')),
                                 child: const Text(
-                                  'Henok Enyew',
+                                  'Yohannes Alemu',
                                   style: TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.bold),
                                 ),
                               ),

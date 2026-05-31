@@ -97,8 +97,8 @@ class AboutScreen extends StatelessWidget {
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Hi there! I am Henok, a software engineer.',
+                           Text(
+                            'Hi there! I am Yohannes, a software engineer.',
                             style: TextStyle(fontSize: 15, height: 1.5),
                           ),
                           SizedBox(height: 16),
@@ -118,7 +118,7 @@ class AboutScreen extends StatelessWidget {
 
                     // Contact Card
                     GestureDetector(
-                      onTap: () => launchUrl(Uri.parse('https://henokenyew.me')),
+                      onTap: () => launchUrl(Uri.parse('https://github.com/johannesalemu01')),
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -144,12 +144,12 @@ class AboutScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Henok Enyew',
+                                    'Yohannes Alemu',
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'henokenyew.me',
+                                    'github.com/johannesalemu01',
                                     style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 2),
