@@ -1,3 +1,4 @@
+import 'package:birr_track/data/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +21,10 @@ class AnalyticsScreen extends StatefulWidget {
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   String _period = 'monthly'; // 'daily' | 'monthly' | 'yearly'
 
-  Map<String, dynamic> _calculatePeriodStats(List<Transaction> transactions, List<Category> categories) {
+  Map<String, dynamic> _calculatePeriodStats(
+    List<Transaction> transactions,
+    List<Category> categories,
+  ) {
     final now = DateTime.now();
     List<Transaction> filtered = [];
 
@@ -29,27 +33,33 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       filtered = transactions.where((t) => t.date == todayStr).toList();
     } else if (_period == 'monthly') {
       final monthStr = '${now.year}-${now.month.toString().padLeft(2, '0')}';
-      filtered = transactions.where((t) => t.date.startsWith(monthStr)).toList();
+      filtered = transactions
+          .where((t) => t.date.startsWith(monthStr))
+          .toList();
     } else {
       final yearStr = '${now.year}';
       filtered = transactions.where((t) => t.date.startsWith(yearStr)).toList();
     }
 
-    final income = filtered.where((t) => t.type == TransactionType.income).fold(0.0, (s, t) => s + t.amount);
-    final expense = filtered.where((t) => t.type == TransactionType.expense).fold(0.0, (s, t) => s + t.amount);
+    final income = filtered
+        .where((t) => t.type == TransactionType.income)
+        .fold(0.0, (s, t) => s + t.amount);
+    final expense = filtered
+        .where((t) => t.type == TransactionType.expense)
+        .fold(0.0, (s, t) => s + t.amount);
 
     final Map<String, double> catBreakdown = {};
     for (final t in filtered.where((t) => t.type == TransactionType.expense)) {
-      catBreakdown[t.categoryId] = (catBreakdown[t.categoryId] ?? 0.0) + t.amount;
+      catBreakdown[t.categoryId] =
+          (catBreakdown[t.categoryId] ?? 0.0) + t.amount;
     }
 
     final pieData = catBreakdown.entries.map((entry) {
-      final cat = categories.firstWhere((c) => c.id == entry.key, orElse: () => categories.first);
-      return PieSlice(
-        label: cat.name,
-        value: entry.value,
-        color: cat.color,
+      final cat = categories.firstWhere(
+        (c) => c.id == entry.key,
+        orElse: () => categories.first,
       );
+      return PieSlice(label: cat.name, value: entry.value, color: cat.color);
     }).toList();
     pieData.sort((a, b) => b.value.compareTo(a.value));
 
@@ -67,7 +77,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final provider = context.watch<AppProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final stats = _calculatePeriodStats(provider.transactions, provider.categories);
+    final stats = _calculatePeriodStats(
+      provider.transactions,
+      provider.categories,
+    );
     final pieData = stats['pieData'] as List<PieSlice>;
 
     String periodLabel = '';
@@ -86,7 +99,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           children: [
             // Header
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 12.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -114,14 +130,27 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
             // Period Selector
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 8.0,
+              ),
               child: Row(
                 children: [
-                  Expanded(child: _buildPeriodChip('daily', 'Today', Icons.today)),
+                  Expanded(
+                    child: _buildPeriodChip('daily', 'Today', Icons.today),
+                  ),
                   const SizedBox(width: 8),
-                  Expanded(child: _buildPeriodChip('monthly', 'Month', Icons.calendar_today)),
+                  Expanded(
+                    child: _buildPeriodChip(
+                      'monthly',
+                      'Month',
+                      Icons.calendar_today,
+                    ),
+                  ),
                   const SizedBox(width: 8),
-                  Expanded(child: _buildPeriodChip('yearly', 'Year', Icons.language)),
+                  Expanded(
+                    child: _buildPeriodChip('yearly', 'Year', Icons.language),
+                  ),
                 ],
               ),
             ),
@@ -135,13 +164,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   children: [
                     // Summary metrics cards
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 8.0,
+                      ),
                       child: Row(
                         children: [
                           Expanded(
                             child: _buildMetricCard(
                               label: 'Income',
-                              value: '${(stats['income'] as double).toStringAsFixed(0)} ETB',
+                              value:
+                                  '${(stats['income'] as double).toStringAsFixed(0)} ETB',
                               color: AppColors.income,
                               icon: Icons.arrow_downward,
                             ),
@@ -150,7 +183,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           Expanded(
                             child: _buildMetricCard(
                               label: 'Expenses',
-                              value: '${(stats['expense'] as double).toStringAsFixed(0)} ETB',
+                              value:
+                                  '${(stats['expense'] as double).toStringAsFixed(0)} ETB',
                               color: AppColors.expense,
                               icon: Icons.arrow_upward,
                             ),
@@ -161,16 +195,25 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
                     // Net savings card
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 8.0,
+                      ),
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: ((stats['net'] as double) >= 0 ? AppColors.income : AppColors.expense)
-                              .withOpacity(0.08),
+                          color:
+                              ((stats['net'] as double) >= 0
+                                      ? AppColors.income
+                                      : AppColors.expense)
+                                  .withOpacity(0.08),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: ((stats['net'] as double) >= 0 ? AppColors.income : AppColors.expense)
-                                .withOpacity(0.15),
+                            color:
+                                ((stats['net'] as double) >= 0
+                                        ? AppColors.income
+                                        : AppColors.expense)
+                                    .withOpacity(0.15),
                             width: 1,
                           ),
                         ),
@@ -197,15 +240,21 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
-                                        color: (stats['net'] as double) >= 0 ? AppColors.income : AppColors.expense,
+                                        color: (stats['net'] as double) >= 0
+                                            ? AppColors.income
+                                            : AppColors.expense,
                                       ),
                                     ),
                                   ],
                                 ),
                                 Icon(
-                                  (stats['net'] as double) >= 0 ? Icons.trending_up : Icons.trending_down,
+                                  (stats['net'] as double) >= 0
+                                      ? Icons.trending_up
+                                      : Icons.trending_down,
                                   size: 28,
-                                  color: (stats['net'] as double) >= 0 ? AppColors.income : AppColors.expense,
+                                  color: (stats['net'] as double) >= 0
+                                      ? AppColors.income
+                                      : AppColors.expense,
                                 ),
                               ],
                             ),
@@ -226,25 +275,38 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     SpendingStreakCard(transactions: provider.transactions),
 
                     // Heatmap
-                    ContributionHeatmap(transactions: provider.transactions, period: _period),
+                    ContributionHeatmap(
+                      transactions: provider.transactions,
+                      period: _period,
+                    ),
 
                     // Flow Chart
-                    SpendingFlowChart(transactions: provider.transactions, period: _period),
+                    SpendingFlowChart(
+                      transactions: provider.transactions,
+                      period: _period,
+                    ),
 
                     // Bar Chart
-                    AnimatedBarChart(transactions: provider.transactions, period: _period),
+                    AnimatedBarChart(
+                      transactions: provider.transactions,
+                      period: _period,
+                    ),
 
                     // Category Breakdown Donut Chart
                     PieChartWidget(
                       data: pieData,
                       centerLabel: 'Expenses',
-                      centerValue: '${(stats['expense'] as double).toStringAsFixed(0)} ETB',
+                      centerValue:
+                          '${(stats['expense'] as double).toStringAsFixed(0)} ETB',
                     ),
 
                     // Top Spending ranked list
                     if (pieData.isNotEmpty) ...[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 16.0,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -259,10 +321,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             const SizedBox(height: 12),
                             Container(
                               decoration: BoxDecoration(
-                                color: isDark ? AppColors.darkSurface : Colors.white,
+                                color: isDark
+                                    ? AppColors.darkSurface
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+                                  color: isDark
+                                      ? AppColors.darkBorder
+                                      : AppColors.borderLight,
                                 ),
                               ),
                               child: Column(
@@ -271,15 +337,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                   (idx) {
                                     final item = pieData[idx];
                                     final maxVal = pieData.first.value;
-                                    final pct = maxVal > 0 ? item.value / maxVal : 0.0;
+                                    final pct = maxVal > 0
+                                        ? item.value / maxVal
+                                        : 0.0;
 
                                     return Container(
                                       padding: const EdgeInsets.all(14),
                                       decoration: BoxDecoration(
-                                        border: idx < (pieData.length > 5 ? 4 : pieData.length - 1)
+                                        border:
+                                            idx <
+                                                (pieData.length > 5
+                                                    ? 4
+                                                    : pieData.length - 1)
                                             ? Border(
                                                 bottom: BorderSide(
-                                                  color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+                                                  color: isDark
+                                                      ? AppColors.darkBorder
+                                                      : AppColors.borderLight,
                                                 ),
                                               )
                                             : null,
@@ -291,8 +365,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                             height: 28,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: item.color.withOpacity(0.12),
-                                              borderRadius: BorderRadius.circular(8),
+                                              color: item.color.withOpacity(
+                                                0.12,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Text(
                                               '${idx + 1}',
@@ -305,16 +382,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                           const SizedBox(width: 12),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(
                                                       item.label,
                                                       style: const TextStyle(
                                                         fontSize: 14,
-                                                        fontWeight: FontWeight.w600,
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                         color: AppColors.text,
                                                       ),
                                                     ),
@@ -322,22 +403,30 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                                       '${item.value.toStringAsFixed(0)} ETB',
                                                       style: const TextStyle(
                                                         fontSize: 13,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: AppColors.textSecondary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: AppColors
+                                                            .textSecondary,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 6),
                                                 ClipRRect(
-                                                  borderRadius: BorderRadius.circular(3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
                                                   child: LinearProgressIndicator(
                                                     value: pct,
                                                     minHeight: 6,
                                                     backgroundColor: isDark
-                                                        ? AppColors.darkSurfaceSecondary
-                                                        : AppColors.surfaceSecondary,
-                                                    valueColor: AlwaysStoppedAnimation<Color>(item.color),
+                                                        ? AppColors
+                                                              .darkSurfaceSecondary
+                                                        : AppColors
+                                                              .surfaceSecondary,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                          Color
+                                                        >(item.color),
                                                   ),
                                                 ),
                                               ],
@@ -408,10 +497,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       decoration: BoxDecoration(
         color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: color.withOpacity(0.15),
-          width: 1,
-        ),
+        border: Border.all(color: color.withOpacity(0.15), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

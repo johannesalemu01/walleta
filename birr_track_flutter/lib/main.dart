@@ -12,7 +12,7 @@ import 'widgets/app_lock_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final storageService = await StorageService.init();
+  final storageService = await StorageService.create();
   final secureStorage = SecureStorageService();
 
   final themeProvider = ThemeProvider();
