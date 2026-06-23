@@ -8,6 +8,9 @@ class AppColors {
   static const Color accent = Color(0xFFE76F51);
   static const Color accentLight = Color(0xFFF4A261);
 
+  // Secondary palette
+  static const Color secondary = Color(0xFF6A4C93);
+
   // Semantic
   static const Color income = Color(0xFF2A9D8F);
   static const Color incomeLight = Color(0xFFE6F4F2);

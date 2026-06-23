@@ -28,7 +28,7 @@ class AppTheme {
       colorScheme: ColorScheme.light(
         primary: AppColors.primary,
         onPrimary: AppColors.textInverse,
-        secondary: AppColors.primaryLight,
+        secondary: AppColors.secondary,
         surface: AppColors.surface,
         onSurface: AppColors.text,
         surfaceContainerHighest: AppColors.surfaceSecondary,
@@ -102,6 +102,10 @@ class AppTheme {
         trackColor: WidgetStateProperty.resolveWith((s) =>
             s.contains(WidgetState.selected) ? AppColors.primary.withOpacity(0.4) : AppColors.textTertiary.withOpacity(0.3)),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.secondary,
+        foregroundColor: AppColors.textInverse,
+      ),
     );
   }
 
@@ -111,7 +115,7 @@ class AppTheme {
       colorScheme: ColorScheme.dark(
         primary: AppColors.primaryLight,
         onPrimary: AppColors.textInverse,
-        secondary: AppColors.primaryLight,
+        secondary: AppColors.secondary,
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkText,
         surfaceContainerHighest: AppColors.darkSurfaceSecondary,
@@ -183,6 +187,10 @@ class AppTheme {
             s.contains(WidgetState.selected) ? AppColors.primaryLight : AppColors.darkTextSecondary),
         trackColor: WidgetStateProperty.resolveWith((s) =>
             s.contains(WidgetState.selected) ? AppColors.primaryLight.withOpacity(0.4) : AppColors.darkTextSecondary.withOpacity(0.3)),
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.secondary,
+        foregroundColor: AppColors.textInverse,
       ),
     );
   }
